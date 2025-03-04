@@ -50,7 +50,7 @@ The application will be available at http://127.0.0.1:5000/.
 4. Přihlašovací údaje:
    - **Server:** `mariadb`
    - **Uživatel:** `uzivatel` (nebo `root` pro administrátora)
-   - **Heslo:** `heslo` (nebo `rootpassword` pro root)
+   - **Heslo:** `heslo` (nebo `root` pro root)
 
 ## Zastavení databáze
 ```sh
