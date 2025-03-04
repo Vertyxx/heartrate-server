@@ -59,7 +59,7 @@ docker-compose down
 
 ## Smazání databázových dat (reset)
 ```sh
-docker volume rm mariadb_data
+docker volume rm docker_mariadb_data
 ```
 
 
