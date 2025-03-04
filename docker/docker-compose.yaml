@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  mariadb:
+    image: mariadb:10.5
+    container_name: mariadb_container
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: HeartRate
+      MYSQL_USER: uzivatel
+      MYSQL_PASSWORD: heslo
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ../sql/database_create.sql:/docker-entrypoint-initdb.d/database_create.sql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin_container
+    restart: unless-stopped
+    environment:
+      PMA_HOST: mariadb  # Odkazuje na název služby v Docker Compose
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "8080:80"  # Otevře phpMyAdmin na http://localhost:8080
+
+volumes:
+  mariadb_data:
