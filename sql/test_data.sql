@@ -17,4 +17,4 @@ VALUES
 -- Vložení testovací srdeční aktivity pro pacienta
 INSERT INTO Srdecni_aktivita (pacient_id, cas, cviceni, bpm)
 VALUES 
-((SELECT id FROM Pacient WHERE email = 'jan.novak@example.com'), NOW(), 0, 75.5);
+((SELECT id FROM Pacient WHERE email = 'jan.novak@example.com'), NOW(), 0, 60.5);

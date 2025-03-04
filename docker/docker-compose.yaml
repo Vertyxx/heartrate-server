@@ -13,6 +13,7 @@ services:
     volumes:
       - mariadb_data:/var/lib/mysql
       - ../sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ../sql/test_data.sql:/docker-entrypoint-initdb.d/test_data.sql    # Vložení testovacích dat
 
 
 
