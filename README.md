@@ -9,7 +9,7 @@
 
 2. Navigate into the project directory:
     ```bash
-    cd project_name
+    cd heartrate-server
     ```
 
 3. Create and activate a virtual environment:
