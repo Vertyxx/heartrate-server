@@ -1,8 +1,8 @@
-CREATE DATABASE HeartRate;
+-- CREATE DATABASE HeartRate;
 USE HeartRate;
 
 -- Tabulka Pacient
-CREATE TABLE Pacient (
+CREATE TABLE IF NOT EXISTS Pacient (
     id INT AUTO_INCREMENT PRIMARY KEY,
     datum_narozeni DATE NOT NULL,
     jmeno VARCHAR(50) NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE Pacient (
 );
 
 -- Tabulka Lekar
-CREATE TABLE Lekar (
+CREATE TABLE IF NOT EXISTS Lekar (
     id INT AUTO_INCREMENT PRIMARY KEY,
     datum_narozeni DATE NOT NULL,
     jmeno VARCHAR(50) NOT NULL,
@@ -28,7 +28,7 @@ CREATE TABLE Lekar (
 );
 
 -- Tabulka pro relaci mezi pacienty a lékaři (mnoho na mnoho)
-CREATE TABLE Pacient_Lekar (
+CREATE TABLE IF NOT EXISTS Pacient_Lekar (
     pacient_id INT,
     lekar_id INT,
     PRIMARY KEY (pacient_id, lekar_id),
@@ -37,7 +37,7 @@ CREATE TABLE Pacient_Lekar (
 );
 
 -- Tabulka Srdecni_aktivita
-CREATE TABLE Srdecni_aktivita (
+CREATE TABLE IF NOT EXISTS Srdecni_aktivita (
     pacient_id INT NOT NULL,
     cas DATETIME NOT NULL,
     cviceni INT DEFAULT 0 NOT NULL CHECK (cviceni BETWEEN 0 AND 3),
