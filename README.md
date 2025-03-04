@@ -30,3 +30,36 @@
     ```
 
 The application will be available at http://127.0.0.1:5000/.
+
+# Nastavení a spuštění MariaDB s phpMyAdmin v Dockeru
+
+## Požadavky
+- Docker
+- Docker Compose
+
+## Spuštění databáze
+1. Ujisti se, že jsi ve složce s `docker-compose.yml`.
+2. Spusť databázi:
+   ```sh
+   docker-compose up -d
+   ```
+3. Otevři phpMyAdmin v prohlížeči:
+   ```
+   http://localhost:8080
+   ```
+4. Přihlašovací údaje:
+   - **Server:** `mariadb`
+   - **Uživatel:** `uzivatel` (nebo `root` pro administrátora)
+   - **Heslo:** `heslo` (nebo `rootpassword` pro root)
+
+## Zastavení databáze
+```sh
+docker-compose down
+```
+
+## Smazání databázových dat (reset)
+```sh
+docker volume rm mariadb_data
+```
+
+
