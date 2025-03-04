@@ -1,4 +1,4 @@
-heartrate-server
+# heartrate-server
 
 ## Installation
 
