@@ -39,8 +39,8 @@ services:
     depends_on:
       - mariadb
     volumes:
-      - ../flask:/app  # Mapování složky flask do kontejneru
-    command: ["python", "run.py"]  # Spuštění Flask aplikace
+      - ../flask:/app 
+    command: ["python", "run.py"]
 
 volumes:
   mariadb_data:
