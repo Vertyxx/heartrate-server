@@ -27,5 +27,20 @@ services:
     ports:
       - "8080:80"  # Otevře phpMyAdmin na http://localhost:8080
 
+  flask_app:
+    build: ../flask
+    container_name: flask_container
+    restart: unless-stopped
+    ports:
+      - "5001:5000"
+    environment:
+      - FLASK_ENV=development
+      - DATABASE_URL=mysql+pymysql://uzivatel:heslo@mariadb:3306/HeartRate
+    depends_on:
+      - mariadb
+    volumes:
+      - ../flask:/app  # Mapování složky flask do kontejneru
+    command: ["python", "run.py"]  # Spuštění Flask aplikace
+
 volumes:
   mariadb_data:
