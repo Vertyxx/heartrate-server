@@ -5,4 +5,4 @@ auth = Blueprint('auth', __name__)
 #prozatim
 @auth.route('/')
 def home():
-    return render_template("../views/templates/homepage.html")
+    return render_template("homepage.html")

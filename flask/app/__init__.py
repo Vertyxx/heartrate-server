@@ -10,7 +10,7 @@ db = SQLAlchemy()
 login_manager = LoginManager()
 
 def create_app():
-    app = Flask(__name__)
+    app = Flask(__name__, template_folder="app/views/templates", static_folder="app/static")
 
     app.config.from_object("config")
 
@@ -20,7 +20,7 @@ def create_app():
     from app.controllers.main import main
     app.register_blueprint(main)
 
-    # registration of blueprints
+    # Registrace blueprintů
     app.register_blueprint(auth, url_prefix='/auth')
     app.register_blueprint(dashboard, url_prefix='/')
     app.register_blueprint(api, url_prefix='/api')
