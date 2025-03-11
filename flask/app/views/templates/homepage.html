@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Domovská stránka{% endblock %}
+
+{% block content %}
+<div class="container text-center mt-5">
+    <h1>Vítejte v systému HeartCare</h1>
+    <p class="lead">Platforma pro monitorování srdeční aktivity a správu pacientů</p>
+
+    {% if not current_user.is_authenticated %}
+    <div class="mt-4">
+        <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg">Přihlásit se</a>
+        <a href="{{ url_for('register') }}" class="btn btn-secondary btn-lg">Registrace</a>
+    </div>
+    {% else %}
+        {% if current_user.role == 'pacient' %}
+            <h3 class="mt-4">Vaše poslední srdeční aktivita</h3>
+            <canvas id="heartActivityChart"></canvas>
+        {% elif current_user.role == 'lekar' %}
+            <h3 class="mt-4">Seznam vašich pacientů</h3>
+            <ul class="list-group">
+                {% for pacient in pacienti %}
+                    <li class="list-group-item">
+                        <a href="{{ url_for('pacient_detail', pacient_id=pacient.id) }}">{{ pacient.jmeno }} ({{ pacient.vek }} let)</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endif %}
+</div>
+
+{% if current_user.is_authenticated and current_user.role == 'pacient' %}
+{% if casove_razitka %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var ctx = document.getElementById("heartActivityChart").getContext("2d");
+
+        var casove_razitka = JSON.parse('{{ casove_razitka | tojson | safe }}');
+        var hodnoty_srdce = JSON.parse('{{ hodnoty_srdce | tojson | safe }}');
+
+        var chart = new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: casove_razitka,
+                datasets: [{
+                    label: "Srdeční aktivita",
+                    data: hodnoty_srdce,
+                    borderColor: "red",
+                    fill: false
+                }]
+            }
+        });
+    });
+</script>
+{% else %}
+<p class="text-muted">Nemáte žádné zaznamenané údaje o srdeční aktivitě.</p>
+{% endif %}
+{% endif %}
+{% endblock %}
