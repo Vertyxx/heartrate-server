@@ -12,7 +12,7 @@
         <nav>
             <ul>
                 <li><a href="{{ url_for('main.homepage') }}">Domů</a></li>
-                <li><a href="{{ url_for('auth.login') }}">Přihlášení</a></li>
+                <li><a href="{{ url_for('auth.login', _external=True) }}">Přihlášení</a></li>
                 <li><a href="{{ url_for('auth.register') }}">Registrace</a></li>
             </ul>
         </nav>

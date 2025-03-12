@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Přihlášení{% endblock %}
+
+{% block content %}
+<h2>Přihlášení</h2>
+<form action="{{ url_for('auth.login') }}" method="post">
+    <div>
+        <label for="email">E-mail:</label>
+        <input type="text" id="email" name="email" placeholder="Zadejte svůj e-mail" required>
+    </div>
+    <div>
+        <label for="password">Heslo:</label>
+        <input type="password" id="password" name="password" placeholder="Zadejte své heslo" required>
+    </div>
+    <button type="submit">Přihlásit se</button>
+</form>
+<p>Nemáte účet? <a href="{{ url_for('auth.register') }}">Zaregistrujte se</a></p>
+{% endblock %}
