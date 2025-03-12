@@ -35,7 +35,10 @@ services:
       - "5001:5000"
     environment:
       - FLASK_ENV=development
-      - DATABASE_URL=mysql+pymysql://uzivatel:heslo@mariadb:3306/HeartRate
+      - DB_USERNAME=uzivatel
+      - DB_PASSWORD=heslo
+      - DB_HOST=mariadb
+      - DB_NAME=HeartRate
     depends_on:
       - mariadb
     volumes:
