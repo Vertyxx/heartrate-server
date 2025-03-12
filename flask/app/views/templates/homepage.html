@@ -9,8 +9,8 @@
 
     {% if not current_user.is_authenticated %}
     <div class="mt-4">
-        <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg">Přihlásit se</a>
-        <a href="{{ url_for('register') }}" class="btn btn-secondary btn-lg">Registrace</a>
+        <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-lg">Přihlásit se</a>
+        <a href="{{ url_for('auth.register') }}" class="btn btn-secondary btn-lg">Registrace</a>
     </div>
     {% else %}
         {% if current_user.role == 'pacient' %}
