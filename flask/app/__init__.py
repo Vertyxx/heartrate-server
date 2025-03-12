@@ -21,11 +21,14 @@ def create_app():
     db.init_app(app)
     login_manager.init_app(app)
 
-    from app.models import user_model  
+    from app.models.user_model import Pacient, Lekar
 
     @login_manager.user_loader
     def load_user(user_id):
-        return user_model.query.get(int(user_id))  # Funkce, která získá uživatele podle ID
+        user = Pacient.query.get(int(user_id))
+        if not user:
+            user = Lekar.query.get(int(user_id))
+        return user
     
     with app.app_context():
         db.create_all()  # Vytvoří tabulky, pokud neexistují
