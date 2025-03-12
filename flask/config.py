@@ -1,7 +1,11 @@
 import os
 
-# Použití proměnné prostředí, pokud existuje, jinak fallback na defaultní hodnotu
-SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "mysql+pymysql://uzivatel:heslo@localhost:3306/HeartRate")
+DB_USERNAME = os.getenv("DB_USERNAME", "uzivatel")  # Hodnota z docker-compose.yml
+DB_PASSWORD = os.getenv("DB_PASSWORD", "heslo")
+DB_HOST = os.getenv("DB_HOST", "mariadb")  # Název služby v Docker Compose
+DB_NAME = os.getenv("DB_NAME", "HeartRate")
+
+SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:3306/{DB_NAME}"
 
 # Zakázání sledování změn objektů pro lepší výkon
 SQLALCHEMY_TRACK_MODIFICATIONS = False

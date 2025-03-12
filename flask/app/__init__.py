@@ -23,17 +23,19 @@ def create_app():
     db.init_app(app)
     login_manager.init_app(app)
 
-    app.register_blueprint(main)
-
-    # Registrace blueprintů
-    app.register_blueprint(auth, url_prefix='/auth')
-    app.register_blueprint(dashboard, url_prefix='/')
-    app.register_blueprint(api, url_prefix='/api')
-
     from app.modules.auth.models import User  
 
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))  # Funkce, která získá uživatele podle ID
+    
+    with app.app_context():
+        db.create_all()  # Vytvoří tabulky, pokud neexistují
+    
+    # Registrace blueprintů
+    app.register_blueprint(main)
+    app.register_blueprint(auth, url_prefix='/auth')
+    app.register_blueprint(dashboard, url_prefix='/')
+    app.register_blueprint(api, url_prefix='/api')
 
     return app
