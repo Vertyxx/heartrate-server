@@ -28,9 +28,11 @@ CREATE TABLE IF NOT EXISTS Lekar (
 );
 
 -- Tabulka pro relaci mezi pacienty a lékaři (mnoho na mnoho)
+    --stav: 0 = čekající na schválení, 1 = schválený, 2 = zamítnutý, 3 = ukončený
 CREATE TABLE IF NOT EXISTS Pacient_Lekar (
     pacient_id INT,
     lekar_id INT,
+    stav INT DEFAULT 0 NOT NULL CHECK (stav BETWEEN 0 AND 3), 
     PRIMARY KEY (pacient_id, lekar_id),
     FOREIGN KEY (pacient_id) REFERENCES Pacient(id) ON DELETE CASCADE,
     FOREIGN KEY (lekar_id) REFERENCES Lekar(id) ON DELETE CASCADE
