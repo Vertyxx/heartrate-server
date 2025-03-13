@@ -42,13 +42,30 @@
         var chart = new Chart(ctx, {
             type: "line",
             data: {
-                labels: casove_razitka,
+                labels: casove_razitka,  // Časová razítka na ose X
                 datasets: [{
-                    label: "Srdeční aktivita",
-                    data: hodnoty_srdce,
+                    label: "Srdeční aktivita (BPM)",
+                    data: hodnoty_srdce,  // Hodnoty BPM na ose Y
                     borderColor: "red",
                     fill: false
                 }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: "Čas"
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: "Hodnota BPM"
+                        }
+                    }
+                }
             }
         });
     });
