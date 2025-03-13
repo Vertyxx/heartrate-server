@@ -12,8 +12,14 @@
         <nav>
             <ul>
                 <li><a href="{{ url_for('main.homepage') }}">Domů</a></li>
-                <li><a href="{{ url_for('auth.login', _external=True) }}">Přihlášení</a></li>
-                <li><a href="{{ url_for('auth.register') }}">Registrace</a></li>
+                
+                {% if current_user.is_authenticated %}
+                    <li><span class="user-info"> <strong>{{ current_user.jmeno }} {{ current_user.prijmeni }}</strong></span></li>
+                    <li><a href="{{ url_for('auth.logout') }}" class="logout-btn">Odhlásit se</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('auth.login', _external=True) }}">Přihlášení</a></li>
+                    <li><a href="{{ url_for('auth.register') }}">Registrace</a></li>
+                {% endif %}
             </ul>
         </nav>
     </header>
