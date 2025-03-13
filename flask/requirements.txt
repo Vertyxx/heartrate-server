@@ -9,3 +9,4 @@ Werkzeug==2.3.7
 Flask-Login==0.6.2
 Flask-SQLAlchemy==3.0.3
 Flask-Migrate==4.0.4
+mysql-connector-python

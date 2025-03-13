@@ -1,0 +1,3 @@
+Spuštení flask shellu v dockeru:
+    docker exec -it flask_container flask shell
+
