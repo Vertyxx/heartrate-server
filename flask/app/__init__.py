@@ -36,4 +36,7 @@ def create_app():
     # Registrace blueprintů
     app.register_blueprint(main)
     app.register_blueprint(auth, url_prefix='/auth')
+    
+    from app.controllers.api_controller import api 
+    app.register_blueprint(api, url_prefix="/api")  
     return app
