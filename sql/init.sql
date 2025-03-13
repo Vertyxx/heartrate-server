@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS Pacient (
     narodnost VARCHAR(50) NOT NULL,
     titul VARCHAR(20), 
     email VARCHAR(100) NOT NULL UNIQUE,
-    heslo VARCHAR(100) NOT NULL, 
+    heslo VARCHAR(255) NOT NULL, 
     telefon VARCHAR(20)
 );
 
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS Lekar (
     narodnost VARCHAR(50) NOT NULL,
     zamereni VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
-    heslo VARCHAR(100) NOT NULL,        -- Zatím nehashovano
+    heslo VARCHAR(255) NOT NULL,        -- Zatím nehashovano
     telefon VARCHAR(20)
 );
 
