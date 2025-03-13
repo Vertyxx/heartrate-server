@@ -1,7 +1,7 @@
 import os
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
+from flask import Flask, current_app
+from flask_sqlalchemy import SQLAlchemy     # type: ignore
+from flask_login import LoginManager        # type: ignore
 
 from config import Config
 
@@ -26,8 +26,12 @@ def create_app():
 
     @login_manager.user_loader
     def load_user(user_id):
-        with app.app_context():  # Zajištění, že dotaz na databázi probíhá v kontextu aplikace
-            return Pacient.query.get(int(user_id)) or Lekar.query.get(int(user_id))
+        with current_app.app_context():  # 📌 Použití `current_app` namísto `app`
+            session = db.session
+            user = session.get(Pacient, int(user_id))
+            if not user:
+                user = session.get(Lekar, int(user_id))
+            return user
     
     with app.app_context():
         db.create_all()  # Vytvoří tabulky, pokud neexistují

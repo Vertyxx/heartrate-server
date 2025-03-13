@@ -1,19 +1,11 @@
-import mysql.connector
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from flask_login import login_user
-from werkzeug.security import check_password_hash
-from config import Config
+from flask_login import login_user, logout_user     # type: ignore
+from werkzeug.security import check_password_hash, generate_password_hash   # type: ignore
+from flask_sqlalchemy import SQLAlchemy     # type: ignore
+from app import db
+from app.models.user_model import Pacient, Lekar
 
 auth = Blueprint('auth', __name__)
-
-# 📌 Připojení k databázi
-def get_db_connection():
-    return mysql.connector.connect(
-        host=Config.DB_HOST,
-        user=Config.DB_USERNAME,
-        password=Config.DB_PASSWORD,
-        database=Config.DB_NAME
-    )
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
@@ -21,23 +13,19 @@ def login():
         email = request.form.get('email')
         heslo = request.form.get('password')
 
-        conn = get_db_connection()
-        cursor = conn.cursor(dictionary=True)
+        # Dotaz na uživatele v SQLAlchemy
+        user = db.session.execute(db.select(Pacient).filter_by(email=email)).scalar_one_or_none()
+        if not user:
+            user = db.session.execute(db.select(Lekar).filter_by(email=email)).scalar_one_or_none()
 
-        # 📌 Dotaz na uživatele (pacient nebo lékař)
-        cursor.execute("SELECT * FROM Pacient WHERE email = %s UNION SELECT * FROM Lekar WHERE email = %s", (email, email))
-        user = cursor.fetchone()
-
-        cursor.close()
-        conn.close()
-
-        if user and check_password_hash(user["heslo"], heslo):
+        if user and check_password_hash(user.heslo, heslo):
             login_user(user)
             flash('Úspěšné přihlášení', 'success')
-            return redirect(url_for('main.index'))
+            return redirect(url_for('main.homepage'))
         else:
             flash('Neplatné přihlašovací údaje', 'danger')
-            return render_template("login.html")
+
+    return render_template("login.html")
 
 
 @auth.route('/register', methods=['GET', 'POST'])
@@ -61,7 +49,9 @@ def register():
             return redirect(url_for('auth.register'))
 
         with db.session.begin():  # Ujistíme se, že dotazy na databázi jsou správně propojené
-            existing_user = Pacient.query.filter_by(email=email).first() or Lekar.query.filter_by(email=email).first()
+            existing_user = db.session.execute(db.select(Pacient).filter_by(email=email)).scalar_one_or_none()
+            if not existing_user:
+                existing_user = db.session.execute(db.select(Lekar).filter_by(email=email)).scalar_one_or_none()
 
         if existing_user:
             flash('Účet s tímto e-mailem již existuje!', 'danger')
@@ -102,3 +92,9 @@ def register():
         return redirect(url_for('auth.login'))
 
     return render_template("register.html")
+
+@auth.route('/logout')
+def logout():
+    logout_user()
+    flash("Byl jsi úspěšně odhlášen.", "success")
+    return redirect(url_for('main.homepage')) 
