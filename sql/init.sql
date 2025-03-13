@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS Pacient (
     narodnost VARCHAR(50) NOT NULL,
     titul VARCHAR(20), 
     email VARCHAR(100) NOT NULL UNIQUE,
-    heslo VARCHAR(100) NOT NULL, 
+    heslo VARCHAR(255) NOT NULL, 
     telefon VARCHAR(20)
 );
 
@@ -23,14 +23,16 @@ CREATE TABLE IF NOT EXISTS Lekar (
     narodnost VARCHAR(50) NOT NULL,
     zamereni VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
-    heslo VARCHAR(100) NOT NULL,        -- Zatím nehashovano
+    heslo VARCHAR(255) NOT NULL,        -- Zatím nehashovano
     telefon VARCHAR(20)
 );
 
 -- Tabulka pro relaci mezi pacienty a lékaři (mnoho na mnoho)
+    --stav: 0 = čekající na schválení, 1 = schválený, 2 = zamítnutý, 3 = ukončený
 CREATE TABLE IF NOT EXISTS Pacient_Lekar (
     pacient_id INT,
     lekar_id INT,
+    stav INT DEFAULT 0 NOT NULL CHECK (stav BETWEEN 0 AND 3), 
     PRIMARY KEY (pacient_id, lekar_id),
     FOREIGN KEY (pacient_id) REFERENCES Pacient(id) ON DELETE CASCADE,
     FOREIGN KEY (lekar_id) REFERENCES Lekar(id) ON DELETE CASCADE

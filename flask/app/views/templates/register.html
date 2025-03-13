@@ -4,9 +4,49 @@
 
 {% block content %}
 <h2>Registrace</h2>
+
+{% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
 <form action="{{ url_for('auth.register') }}" method="post">
-    <input type="text" name="email" placeholder="E-mail">
-    <input type="password" name="password" placeholder="Heslo">
+    <label for="role">Registrace jako:</label>
+    <select name="role" id="role" required>
+        <option value="pacient">Pacient</option>
+        <option value="lekar">Lékař</option>
+    </select>
+
+    <input type="text" name="jmeno" placeholder="Jméno" required>
+    <input type="text" name="prijmeni" placeholder="Příjmení" required>
+    <input type="date" name="datum_narozeni" required>
+    <input type="text" name="narodnost" placeholder="Národnost" required>
+    <input type="text" name="titul" placeholder="Titul (nepovinné)">
+    
+    <input type="email" name="email" placeholder="E-mail" required>
+    <input type="password" name="password" placeholder="Heslo" required>
+    <input type="password" name="password_confirm" placeholder="Potvrzení hesla" required>
+    
+    <input type="tel" name="telefon" placeholder="Telefonní číslo">
+
+    <div id="lekar_fields" style="display: none;">
+        <input type="text" name="zamereni" placeholder="Zaměření">
+    </div>
+
     <button type="submit">Registrovat</button>
 </form>
+
+<script>
+    document.getElementById("role").addEventListener("change", function () {
+        var lekarFields = document.getElementById("lekar_fields");
+        if (this.value === "lekar") {
+            lekarFields.style.display = "block";
+        } else {
+            lekarFields.style.display = "none";
+        }
+    });
+</script>
 {% endblock %}

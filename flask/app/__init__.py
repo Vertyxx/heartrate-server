@@ -1,10 +1,9 @@
 import os
 from flask import Flask
-from app.controllers.auth_controller import auth
-from app.controllers.main import main
-
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+
+from config import Config
 
 db = SQLAlchemy()
 login_manager = LoginManager()
@@ -16,23 +15,23 @@ def create_app():
                 template_folder=os.path.join(BASE_DIR, "views/templates"),
                 static_folder=os.path.join(BASE_DIR, "static"))
 
-    app.config.from_object("config")
+    app.config.from_object(Config)
 
     db.init_app(app)
     login_manager.init_app(app)
 
+    from app.controllers.auth_controller import auth
+    from app.controllers.main import main
     from app.models.user_model import Pacient, Lekar
 
     @login_manager.user_loader
     def load_user(user_id):
-        user = Pacient.query.get(int(user_id))
-        if not user:
-            user = Lekar.query.get(int(user_id))
-        return user
+        with app.app_context():  # Zajištění, že dotaz na databázi probíhá v kontextu aplikace
+            return Pacient.query.get(int(user_id)) or Lekar.query.get(int(user_id))
     
     with app.app_context():
         db.create_all()  # Vytvoří tabulky, pokud neexistují
-    
+
     # Registrace blueprintů
     app.register_blueprint(main)
     app.register_blueprint(auth, url_prefix='/auth')
