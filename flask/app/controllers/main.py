@@ -10,20 +10,22 @@ main = Blueprint('main', __name__)
 def homepage():
     # Získání srdeční aktivity pro aktuálního uživatele (pacienta i lékaře)
     aktivity = (
-        db.session.query(SrdecniAktivita.cas, SrdecniAktivita.bpm)
+        db.session.query(SrdecniAktivita.cas, SrdecniAktivita.bpm, SrdecniAktivita.cviceni)
         .filter(SrdecniAktivita.uzivatel_id == current_user.id)
         .order_by(SrdecniAktivita.cas.asc())
         .all()
     )
 
     # Převod dat na seznamy pro JSON
-    casove_razitka = [a.cas.strftime("%Y-%m-%d %H:%M:%S") for a in aktivity]  # Formát času
-    hodnoty_srdce = [a.bpm for a in aktivity]  # BPM hodnoty
+    casove_razitka = [a.cas.strftime("%Y-%m-%d %H:%M:%S") for a in aktivity] if aktivity else []
+    hodnoty_srdce = [a.bpm for a in aktivity] if aktivity else []
+    cviceni_hodnoty = [a.cviceni for a in aktivity] if aktivity else []
 
     return render_template(
         "homepage.html",
         casove_razitka=casove_razitka,
-        hodnoty_srdce=hodnoty_srdce
+        hodnoty_srdce=hodnoty_srdce,
+        cviceni_hodnoty=cviceni_hodnoty
     )
 
 
@@ -53,21 +55,21 @@ def pacient_detail(pacient_id):
         flash("Pacient nenalezen.", "danger")
         return redirect(url_for("main.moji_pacienti"))
 
-    # Získání srdeční aktivity pacienta
     aktivity = (
-        db.session.query(SrdecniAktivita.cas, SrdecniAktivita.bpm)
+        db.session.query(SrdecniAktivita.cas, SrdecniAktivita.bpm, SrdecniAktivita.cviceni)
         .filter(SrdecniAktivita.uzivatel_id == pacient_id)
         .order_by(SrdecniAktivita.cas.asc())
         .all()
     )
 
-    # Převod dat na seznamy pro JSON
     casove_razitka = [a.cas.strftime("%Y-%m-%d %H:%M:%S") for a in aktivity] if aktivity else []
     hodnoty_srdce = [a.bpm for a in aktivity] if aktivity else []
+    cviceni_hodnoty = [a.cviceni for a in aktivity] if aktivity else []
 
     return render_template(
         "pacient_detail.html",
         pacient=pacient,
         casove_razitka=casove_razitka,
-        hodnoty_srdce=hodnoty_srdce
+        hodnoty_srdce=hodnoty_srdce,
+        cviceni_hodnoty=cviceni_hodnoty
     )

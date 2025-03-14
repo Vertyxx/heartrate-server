@@ -26,22 +26,26 @@
     {% endif %}
 </div>
 
-{% if current_user.is_authenticated%}
-{% if casove_razitka %}
-<canvas id="heartActivityChart"></canvas>
+{% if current_user.is_authenticated %}
+    <h3 class="mt-4">Vaše srdeční aktivita</h3>
+    
+    {% if casove_razitka %}
+        <canvas id="heartActivityChart"></canvas>
 
-<script type="application/json" id="heart-data">
-    {
-        "casove_razitka": {{ casove_razitka | tojson | safe }},
-        "hodnoty_srdce": {{ hodnoty_srdce | tojson | safe }}
-    }
-</script>
+        <!-- Uložení dat jako JSON -->
+        <script type="application/json" id="heart-data">
+            {
+                "casove_razitka": {{ casove_razitka | tojson | safe }},
+                "hodnoty_srdce": {{ hodnoty_srdce | tojson | safe }},
+                "cviceni_hodnoty": {{ cviceni_hodnoty | tojson | safe }}
+            }
+        </script>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="{{ url_for('static', filename='js/heart_chart.js') }}"></script>
-
-{% else %}
-<p class="text-muted">Nemáte žádné zaznamenané údaje o srdeční aktivitě.</p>
-{% endif %}
+        <!-- Načtení externího JavaScriptu -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="{{ url_for('static', filename='js/heart_chart.js') }}"></script>
+    {% else %}
+        <p class="text-muted">Nemáte žádná zaznamenaná srdeční data.</p>
+    {% endif %}
 {% endif %}
 {% endblock %}
