@@ -13,63 +13,30 @@
         <a href="{{ url_for('auth.register') }}" class="btn btn-secondary btn-lg">Registrace</a>
     </div>
     {% else %}
-        {% if current_user.role == 'pacient' %}
+        {% if current_user.is_authenticated%}
             <h3 class="mt-4">Vaše poslední srdeční aktivita</h3>
             <canvas id="heartActivityChart"></canvas>
-        {% elif current_user.role == 'lekar' %}
-            <h3 class="mt-4">Seznam vašich pacientů</h3>
-            <ul class="list-group">
-                {% for pacient in pacienti %}
-                    <li class="list-group-item">
-                        <a href="{{ url_for('pacient_detail', pacient_id=pacient.id) }}">{{ pacient.jmeno }} ({{ pacient.vek }} let)</a>
-                    </li>
-                {% endfor %}
-            </ul>
+                <!-- Odkaz na stránku se seznamem pacientů (pouze pro lékaře) -->
+            {% if current_user.role == 'lekar' %}
+                <div class="mt-4">
+                    <a href="{{ url_for('main.moji_pacienti') }}" class="btn btn-primary">Seznam pacientů</a>
+                </div>
+            {% endif %}
         {% endif %}
     {% endif %}
 </div>
 
-{% if current_user.is_authenticated and current_user.role == 'pacient' %}
+{% if current_user.is_authenticated%}
 {% if casove_razitka %}
+<canvas id="heartActivityChart"></canvas>
+
+<div id="heart-data" 
+     data-cas='{{ casove_razitka | tojson | safe }}' 
+     data-bpm='{{ hodnoty_srdce | tojson | safe }}'></div>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        var ctx = document.getElementById("heartActivityChart").getContext("2d");
+<script src="{{ url_for('static', filename='js/heart_chart.js') }}"></script>
 
-        var casove_razitka = JSON.parse('{{ casove_razitka | tojson | safe }}');
-        var hodnoty_srdce = JSON.parse('{{ hodnoty_srdce | tojson | safe }}');
-
-        var chart = new Chart(ctx, {
-            type: "line",
-            data: {
-                labels: casove_razitka,  // Časová razítka na ose X
-                datasets: [{
-                    label: "Srdeční aktivita (BPM)",
-                    data: hodnoty_srdce,  // Hodnoty BPM na ose Y
-                    borderColor: "red",
-                    fill: false
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x: {
-                        title: {
-                            display: true,
-                            text: "Čas"
-                        }
-                    },
-                    y: {
-                        title: {
-                            display: true,
-                            text: "Hodnota BPM"
-                        }
-                    }
-                }
-            }
-        });
-    });
-</script>
 {% else %}
 <p class="text-muted">Nemáte žádné zaznamenané údaje o srdeční aktivitě.</p>
 {% endif %}
