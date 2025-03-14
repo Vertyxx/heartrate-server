@@ -30,9 +30,12 @@
 {% if casove_razitka %}
 <canvas id="heartActivityChart"></canvas>
 
-<div id="heart-data" 
-     data-cas='{{ casove_razitka | tojson | safe }}' 
-     data-bpm='{{ hodnoty_srdce | tojson | safe }}'></div>
+<script type="application/json" id="heart-data">
+    {
+        "casove_razitka": {{ casove_razitka | tojson | safe }},
+        "hodnoty_srdce": {{ hodnoty_srdce | tojson | safe }}
+    }
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="{{ url_for('static', filename='js/heart_chart.js') }}"></script>

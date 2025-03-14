@@ -43,3 +43,31 @@ def moji_pacienti():
     )
 
     return render_template("moji_pacienti.html", pacienti=pacienti)
+
+@main.route("/pacient/<int:pacient_id>")
+@login_required
+def pacient_detail(pacient_id):
+    pacient = db.session.get(User, pacient_id)
+
+    if not pacient or pacient.role != "pacient":
+        flash("Pacient nenalezen.", "danger")
+        return redirect(url_for("main.moji_pacienti"))
+
+    # Získání srdeční aktivity pacienta
+    aktivity = (
+        db.session.query(SrdecniAktivita.cas, SrdecniAktivita.bpm)
+        .filter(SrdecniAktivita.uzivatel_id == pacient_id)
+        .order_by(SrdecniAktivita.cas.asc())
+        .all()
+    )
+
+    # Převod dat na seznamy pro JSON
+    casove_razitka = [a.cas.strftime("%Y-%m-%d %H:%M:%S") for a in aktivity] if aktivity else []
+    hodnoty_srdce = [a.bpm for a in aktivity] if aktivity else []
+
+    return render_template(
+        "pacient_detail.html",
+        pacient=pacient,
+        casove_razitka=casove_razitka,
+        hodnoty_srdce=hodnoty_srdce
+    )

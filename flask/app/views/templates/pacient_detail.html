@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Detail pacienta{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Detail pacienta</h2>
+
+    <div class="card p-3">
+        <h3>{{ pacient.jmeno }} {{ pacient.prijmeni }}</h3>
+        <p><strong>Datum narození:</strong> {{ pacient.datum_narozeni.strftime('%d.%m.%Y') }}</p>
+        <p><strong>Národnost:</strong> {{ pacient.narodnost }}</p>
+        <p><strong>Telefon:</strong> {{ pacient.telefon if pacient.telefon else "Neuvedeno" }}</p>
+        <p><strong>Email:</strong> {{ pacient.email }}</p>
+    </div>
+
+    <h3 class="mt-4">Srdeční aktivita pacienta</h3>
+    {% if casove_razitka %}
+        <canvas id="heartActivityChart"></canvas>
+
+        <!-- Uložení dat jako JSON pro JavaScript -->
+        <script type="application/json" id="heart-data">
+            {
+                "casove_razitka": {{ casove_razitka | tojson | safe }},
+                "hodnoty_srdce": {{ hodnoty_srdce | tojson | safe }}
+            }
+        </script>
+
+        <!-- Načtení externího skriptu -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="{{ url_for('static', filename='js/heart_chart.js') }}"></script>
+    {% else %}
+        <p class="text-muted">Pacient zatím nemá žádné zaznamenané srdeční aktivity.</p>
+    {% endif %}
+
+    <a href="{{ url_for('main.moji_pacienti') }}" class="btn btn-secondary mt-3">Zpět na seznam pacientů</a>
+</div>
+{% endblock %}
