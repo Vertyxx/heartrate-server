@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Moji pacienti{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Seznam pacientů</h2>
+    <ul class="list-group">
+        {% for pacient in pacienti %}
+            <li class="list-group-item">
+                <a href="{{ url_for('main.pacient_detail', pacient_id=pacient.id) }}">
+                    {{ pacient.jmeno }} ({{ pacient.datum_narozeni.strftime('%Y') }} let)
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
