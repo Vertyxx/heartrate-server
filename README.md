@@ -26,6 +26,10 @@
    ```
    http://localhost:5001
    ```
+   API pro posilani dat:
+   ```
+   http://localhost:5001/api/heart_rate
+   ```
 
 ## Zastavení databáze
 ```sh
