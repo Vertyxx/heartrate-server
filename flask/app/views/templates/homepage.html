@@ -13,22 +13,23 @@
         <a href="{{ url_for('auth.register') }}" class="btn btn-secondary btn-lg">Registrace</a>
     </div>
     {% else %}
-        {% if current_user.is_authenticated%}
-            <h3 class="mt-4">Vaše poslední srdeční aktivita</h3>
+        {% if current_user.is_authenticated %}
+            <h3 class="mt-4">Vaše srdeční aktivita</h3>
             <canvas id="heartActivityChart"></canvas>
-                <!-- Odkaz na stránku se seznamem pacientů (pouze pro lékaře) -->
-            {% if current_user.role == 'lekar' %}
-                <div class="mt-4">
+
+            <!-- Odkazy na seznam pacientů a lékařů -->
+            <div class="mt-4">
+                {% if current_user.role == 'lekar' %}
                     <a href="{{ url_for('main.moji_pacienti') }}" class="btn btn-primary">Seznam pacientů</a>
-                </div>
-            {% endif %}
+                {% elif current_user.role == 'pacient' %}
+                    <a href="{{ url_for('main.moji_lekari') }}" class="btn btn-primary">Seznam lékařů</a>
+                {% endif %}
+            </div>
         {% endif %}
     {% endif %}
 </div>
 
 {% if current_user.is_authenticated %}
-    <h3 class="mt-4">Vaše srdeční aktivita</h3>
-    
     {% if casove_razitka %}
         <canvas id="heartActivityChart"></canvas>
 

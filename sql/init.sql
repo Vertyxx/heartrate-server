@@ -17,11 +17,11 @@ CREATE TABLE IF NOT EXISTS User (
 );
 
 -- Tabulka pro relaci mezi uživateli (pacienti & lékaři & lékaři mezi sebou)
-    -- stav: 0 = čekající na schválení, 1 = schválený, 2 = zamítnutý, 3 = ukončený
+    -- stav: 0 = zamitnuty, 1 = schválený, 2 = ukončený, 3 = odeslaný lékařem, 4 = odeslaný pacientem 
 CREATE TABLE IF NOT EXISTS Pacient_Lekar (
     pacient_id INT NOT NULL,
     lekar_id INT NOT NULL,
-    stav INT DEFAULT 0 NOT NULL CHECK (stav BETWEEN 0 AND 3), 
+    stav INT DEFAULT 3 NOT NULL CHECK (stav BETWEEN 0 AND 4), 
     PRIMARY KEY (pacient_id, lekar_id),
     FOREIGN KEY (pacient_id) REFERENCES User(id) ON DELETE CASCADE,
     FOREIGN KEY (lekar_id) REFERENCES User(id) ON DELETE CASCADE

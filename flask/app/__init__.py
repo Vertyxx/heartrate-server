@@ -33,8 +33,9 @@ def create_app():
         db.create_all()  # Vytvoří tabulky, pokud neexistují
 
     # Registrace blueprintů
-    app.register_blueprint(main)
     app.register_blueprint(auth, url_prefix='/auth')
+    app.register_blueprint(main)
+    
     
     from app.controllers.api_controller import api 
     app.register_blueprint(api, url_prefix="/api")  

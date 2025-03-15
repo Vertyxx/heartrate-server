@@ -1,44 +1,42 @@
 {% extends "base.html" %}
 
-{% block title %}Moji pacienti{% endblock %}
+{% block title %}Moji lékaři{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
-    <h2>Seznam pacientů</h2>
+    <h2>Seznam lékařů</h2>
     
-    {% if pacienti %}
+    {% if lekari %}
         <ul class="list-group">
-            {% for pacient in pacienti %}
+            {% for lekar in lekari %}
                 <li class="list-group-item">
-                    <a href="{{ url_for('main.pacient_detail', pacient_id=pacient.id) }}">
-                        {{ pacient.jmeno }} {{ pacient.prijmeni }} ({{ pacient.datum_narozeni.strftime('%Y') }} let)
-                    </a>
+                    <strong>{{ lekar.jmeno }} {{ lekar.prijmeni }}</strong> - {{ lekar.zamereni }}
                 </li>
             {% endfor %}
         </ul>
     {% else %}
-        <p class="text-muted">Nemáte žádné propojené pacienty.</p>
+        <p class="text-muted">Nemáte žádné propojené lékaře.</p>
     {% endif %}
 
     <hr>
 
-    <h2 class="mt-4">Žádosti od pacientů</h2>
+    <h2 class="mt-4">Žádosti od lékařů</h2>
     
-    {% if zadosti_lekar %}
+    {% if zadosti_pacient %}
         <ul class="list-group">
-            {% for zadost in zadosti_lekar %}
+            {% for zadost in zadosti_pacient %}
                 <li class="list-group-item">
-                    <strong>{{ zadost.jmeno }} {{ zadost.prijmeni }}</strong> žádá o propojení.  
-                    
+                    Lékař <strong>{{ zadost.jmeno }} {{ zadost.prijmeni }}</strong> vám poslal žádost.  
+
                     <!-- Schválení žádosti -->
                     <form action="{{ url_for('main.schvalit_zadost') }}" method="POST" style="display:inline;">
-                        <input type="hidden" name="pacient_id" value="{{ zadost.id }}">
+                        <input type="hidden" name="lekar_id" value="{{ zadost.id }}">
                         <button type="submit" class="btn btn-success btn-sm">Schválit</button>
                     </form>
 
                     <!-- Odmítnutí žádosti -->
                     <form action="{{ url_for('main.odmitnout_zadost') }}" method="POST" style="display:inline;">
-                        <input type="hidden" name="pacient_id" value="{{ zadost.id }}">
+                        <input type="hidden" name="lekar_id" value="{{ zadost.id }}">
                         <button type="submit" class="btn btn-danger btn-sm">Odmítnout</button>
                     </form>
                 </li>

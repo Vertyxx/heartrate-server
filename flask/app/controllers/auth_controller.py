@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from flask_login import login_user, logout_user  # type: ignore
+from flask_login import login_user, logout_user, login_required  # type: ignore
 from werkzeug.security import check_password_hash, generate_password_hash  # type: ignore
 from flask_sqlalchemy import SQLAlchemy  # type: ignore
 from app import db
@@ -79,8 +79,9 @@ def register():
     return render_template("register.html")
 
 
-@auth.route('/logout')
+@auth.route("/logout")
+@login_required
 def logout():
-    logout_user()
+    logout_user()  # Funkce pro odhlášení uživatele
     flash("Byl jsi úspěšně odhlášen.", "success")
-    return redirect(url_for('main.homepage'))
+    return redirect(url_for("main.homepage"))
