@@ -84,6 +84,4 @@ def register():
 def logout():
     logout_user() 
     flash('Byl jsi úspěšně odhlášen.', 'success')
-    #return redirect(url_for('auth.login'))
-    #return redirect(url_for('main.homepage'))
-    return render_template("homepage.html")
+    return redirect(url_for('main.homepage'))
