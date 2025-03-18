@@ -5,8 +5,8 @@ from app.models.user_model import SrdecniAktivita, User, PacientLekar
 
 main = Blueprint('main', __name__)
 
+#!!!Dodelat logiku pro neprihlaseneho uzivtaele!!!!
 @main.route("/")
-@login_required
 def homepage():
     # Získání srdeční aktivity pro aktuálního uživatele (pacienta i lékaře)
     aktivity = (

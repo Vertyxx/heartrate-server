@@ -82,6 +82,8 @@ def register():
 @auth.route("/logout")
 @login_required
 def logout():
-    logout_user()  # Funkce pro odhlášení uživatele
-    flash("Byl jsi úspěšně odhlášen.", "success")
-    return redirect(url_for("main.homepage"))
+    logout_user() 
+    flash('Byl jsi úspěšně odhlášen.', 'success')
+    #return redirect(url_for('auth.login'))
+    #return redirect(url_for('main.homepage'))
+    return render_template("homepage.html")

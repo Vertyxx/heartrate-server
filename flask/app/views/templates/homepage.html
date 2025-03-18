@@ -9,23 +9,20 @@
 
     {% if not current_user.is_authenticated %}
     <div class="mt-4">
-        <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-lg">Přihlásit se</a>
-        <a href="{{ url_for('auth.register') }}" class="btn btn-secondary btn-lg">Registrace</a>
+
     </div>
     {% else %}
-        {% if current_user.is_authenticated %}
-            <h3 class="mt-4">Vaše srdeční aktivita</h3>
-            <canvas id="heartActivityChart"></canvas>
+        <h3 class="mt-4">Vaše srdeční aktivita</h3>
+        <canvas id="heartActivityChart"></canvas>
 
-            <!-- Odkazy na seznam pacientů a lékařů -->
-            <div class="mt-4">
-                {% if current_user.role == 'lekar' %}
-                    <a href="{{ url_for('main.moji_pacienti') }}" class="btn btn-primary">Seznam pacientů</a>
-                {% elif current_user.role == 'pacient' %}
-                    <a href="{{ url_for('main.moji_lekari') }}" class="btn btn-primary">Seznam lékařů</a>
-                {% endif %}
-            </div>
-        {% endif %}
+        <!-- Odkazy na seznam pacientů a lékařů -->
+        <div class="mt-4">
+            {% if current_user.role == 'lekar' %}
+                <a href="{{ url_for('main.moji_pacienti') }}" class="btn btn-primary">Seznam pacientů</a>
+            {% elif current_user.role == 'pacient' %}
+                <a href="{{ url_for('main.moji_lekari') }}" class="btn btn-primary">Seznam lékařů</a>
+            {% endif %}
+        </div>
     {% endif %}
 </div>
 
