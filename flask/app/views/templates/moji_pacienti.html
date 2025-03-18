@@ -47,5 +47,14 @@
     {% else %}
         <p class="text-muted">Žádné nové žádosti.</p>
     {% endif %}
+
+    <!-- Prep for integration -->
+    <!-- <h2 class="mt-4">Hledat pacienta</h2>
+        <form action="{{ url_for('main.search_patient') }}" method="GET">
+            <div class="input-group mb-3">
+                <input type="text" id="searchQuery" name="query" class="form-control" placeholder="Zadejte jméno pacienta" required>
+                <button type="submit" class="btn btn-primary">Vyhledat</button>
+            </div>
+        </form> -->
 </div>
 {% endblock %}
