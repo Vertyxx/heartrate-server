@@ -11,7 +11,7 @@
             {% for pacient in pacienti %}
                 <li class="list-group-item">
                     <a href="{{ url_for('main.pacient_detail', pacient_id=pacient.id) }}">
-                        {{ pacient.jmeno }} {{ pacient.prijmeni }} ({{ pacient.datum_narozeni.strftime('%Y') }} let)
+                        {{ pacient.jmeno }} {{ pacient.prijmeni }} ({{ pacient.datum_narozeni.strftime('%Y') }})
                     </a>
                 </li>
             {% endfor %}
