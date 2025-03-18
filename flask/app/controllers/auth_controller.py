@@ -30,6 +30,7 @@ def login():
 
 # login pro mobilni aplikaci
 # vrati uzivatelo token, ktery bude potrebovat k odesilani dat na API
+#k autorizaci se pouziva JWT
 @auth.route('/api/login', methods=['POST'])
 def api_login():
     """Přihlášení pro mobilní aplikaci (vrací JWT token)"""
