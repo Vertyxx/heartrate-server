@@ -8,6 +8,10 @@ main = Blueprint('main', __name__)
 #!!!Dodelat logiku pro neprihlaseneho uzivtaele!!!!
 @main.route("/")
 def homepage():
+    # Pokud není přihlášený uživatel, vrátí se stránka bez pokusu o načítání dat
+    if not current_user.is_authenticated:
+        return render_template("homepage.html", message="Prosím přihlaste se pro zobrazení srdeční aktivity.")
+
     # Získání srdeční aktivity pro aktuálního uživatele (pacienta i lékaře)
     aktivity = (
         db.session.query(SrdecniAktivita.cas, SrdecniAktivita.bpm, SrdecniAktivita.cviceni)
