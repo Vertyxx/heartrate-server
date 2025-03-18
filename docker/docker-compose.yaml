@@ -39,6 +39,8 @@ services:
       - DB_PASSWORD=heslo
       - DB_HOST=mariadb
       - DB_NAME=HeartRate
+      - JWT_SECRET_KEY=supertajnyklic
+      - JWT_ALGORITHM=HS256
     depends_on:
       - mariadb
     volumes:

@@ -4,9 +4,12 @@ from werkzeug.security import check_password_hash, generate_password_hash  # typ
 from flask_sqlalchemy import SQLAlchemy  # type: ignore
 from app import db
 from app.models.user_model import User  # Použití nového modelu User
+from flask import Flask, request, jsonify
+from flask_jwt_extended import create_access_token
 
 auth = Blueprint('auth', __name__)
 
+# login web
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -24,6 +27,31 @@ def login():
             flash('Neplatné přihlašovací údaje', 'danger')
 
     return render_template("login.html")
+
+# login pro mobilni aplikaci
+# vrati uzivatelo token, ktery bude potrebovat k odesilani dat na API
+@auth.route('/api/login', methods=['POST'])
+def api_login():
+    """Přihlášení pro mobilní aplikaci (vrací JWT token)"""
+    data = request.get_json()
+    email = data.get("email")
+    heslo = data.get("password")
+
+    user = db.session.execute(db.select(User).filter_by(email=email)).scalar_one_or_none()
+
+    if not user or not check_password_hash(user.heslo, heslo):
+        return jsonify({"error": "Neplatné přihlašovací údaje"}), 401
+
+    access_token = create_access_token(identity=str(user.id)) 
+
+    return jsonify({
+        "access_token": access_token,
+        "user": {
+            "id": user.id,
+            "email": user.email,
+            "role": user.role
+        }
+    }), 200 
 
 
 @auth.route('/register', methods=['GET', 'POST'])

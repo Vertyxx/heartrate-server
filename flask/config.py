@@ -14,3 +14,7 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     SECRET_KEY = os.getenv("SECRET_KEY", "a") 
+
+    JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "supertajnyklic")  # Načte JWT klíč z Docker proměnné
+    JWT_ACCESS_TOKEN_EXPIRES = 3600  # Token platný 1 hodinu
+    JWT_ALGORITHM = "HS256"  # Nebo "HS512"

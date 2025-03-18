@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from app import db
 from app.models.user_model import SrdecniAktivita
 from datetime import datetime
@@ -6,50 +7,37 @@ from datetime import datetime
 api = Blueprint("api", __name__)
 
 @api.route("/heart_rate", methods=["POST"])
+@jwt_required()  # 🛠 API endpoint je nyní chráněný JWT
 def record_heart_rate():
     """Přijme JSON s jedním nebo více záznamy tepové frekvence a uloží je do DB."""
     try:
+        user_id = get_jwt_identity()  # 🛠 Získání ID přihlášeného uživatele z JWT tokenu
         data = request.get_json()
 
-        # Ověření, zda data nejsou prázdná
         if not data:
             return jsonify({"error": "Invalid input"}), 400
 
-        # Pokud je data seznam, zpracujeme více položek, jinak jen jednu
-        if isinstance(data, list):
-            new_entries = []
-            for item in data:
-                if "pacient_id" not in item or "bpm" not in item or "cas" not in item or "cviceni" not in item:
-                    return jsonify({"error": "Invalid input in one of the records"}), 400
-                
-                new_entries.append(SrdecniAktivita(
-                    pacient_id=int(item["pacient_id"]),
-                    bpm=float(item["bpm"]),
-                    cas=datetime.strptime(item["cas"], "%Y-%m-%d %H:%M:%S"),
-                    cviceni=int(item["cviceni"])
-                ))
+        # Zajistíme, že data je seznam, i když přijde jen jeden záznam
+        if not isinstance(data, list):
+            data = [data]
 
-            # Přidání všech záznamů najednou
-            db.session.add_all(new_entries)
-            db.session.commit()
+        new_entries = []
+        for item in data:
+            if not all(key in item for key in ("bpm", "cas", "cviceni")):
+                return jsonify({"error": "Invalid input in one of the records"}), 400
 
-            return jsonify({"message": f"{len(new_entries)} heart rate records recorded"}), 201
-        
-        else:
-            # Pokud přijde pouze jeden objekt, zpracujeme ho normálně
-            if "pacient_id" not in data or "bpm" not in data or "cas" not in data or "cviceni" not in data:
-                return jsonify({"error": "Invalid input"}), 400
+            new_entries.append(SrdecniAktivita(
+                uzivatel_id=user_id,  # 🛠 Použití ID uživatele z JWT tokenu
+                bpm=float(item["bpm"]),
+                cas=datetime.strptime(item["cas"], "%Y-%m-%d %H:%M:%S"),
+                cviceni=int(item["cviceni"])
+            ))
 
-            new_entry = SrdecniAktivita(
-                pacient_id=int(data["pacient_id"]),
-                bpm=float(data["bpm"]),
-                cas=datetime.strptime(data["cas"], "%Y-%m-%d %H:%M:%S"),
-                cviceni=int(data["cviceni"])
-            )
-            db.session.add(new_entry)
-            db.session.commit()
+        # Přidání všech záznamů najednou
+        db.session.add_all(new_entries)
+        db.session.commit()
 
-            return jsonify({"message": "Heart rate recorded"}), 201
+        return jsonify({"message": f"{len(new_entries)} heart rate record(s) recorded"}), 201
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500

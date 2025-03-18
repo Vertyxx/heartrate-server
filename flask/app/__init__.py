@@ -2,11 +2,14 @@ import os
 from flask import Flask, current_app
 from flask_sqlalchemy import SQLAlchemy  # type: ignore
 from flask_login import LoginManager  # type: ignore
+from flask_jwt_extended import JWTManager
 
 from config import Config
 
 db = SQLAlchemy()
 login_manager = LoginManager()
+
+jwt = JWTManager()
 
 def create_app():
     BASE_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -19,6 +22,7 @@ def create_app():
 
     db.init_app(app)
     login_manager.init_app(app)
+    jwt.init_app(app)
 
     from app.controllers.auth_controller import auth
     from app.controllers.main import main
