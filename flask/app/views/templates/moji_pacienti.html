@@ -31,13 +31,13 @@
                     <strong>{{ zadost.jmeno }} {{ zadost.prijmeni }}</strong> žádá o propojení.  
                     
                     <!-- Schválení žádosti -->
-                    <form action="{{ url_for('main.schvalit_zadost') }}" method="POST" style="display:inline;">
+                    <form action="{{ url_for('main.schvalit_zadost_lekar') }}" method="POST" style="display:inline;">
                         <input type="hidden" name="pacient_id" value="{{ zadost.id }}">
                         <button type="submit" class="btn btn-success btn-sm">Schválit</button>
                     </form>
 
                     <!-- Odmítnutí žádosti -->
-                    <form action="{{ url_for('main.odmitnout_zadost') }}" method="POST" style="display:inline;">
+                    <form action="{{ url_for('main.odmitnout_zadost_lekar') }}" method="POST" style="display:inline;">
                         <input type="hidden" name="pacient_id" value="{{ zadost.id }}">
                         <button type="submit" class="btn btn-danger btn-sm">Odmítnout</button>
                     </form>
